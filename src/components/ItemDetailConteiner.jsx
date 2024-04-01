@@ -2,12 +2,11 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import Container from "react-bootstrap/Container";
-import { ItemList } from "./ItemList";
 
 import data from "../data/products.json";
 
-export const ItemListConteiner = (props) => {
-  const [products, setProducts] = useState([]);
+export const ItemDetailConteiner = () => {
+  const [product, setProduct] = useState(null);
 
   const { id } = useParams();
 
@@ -17,18 +16,23 @@ export const ItemListConteiner = (props) => {
     });
 
     get.then((data) => {
-      if (id) {
-        const filteredData = data.filter((d) => d.category === id);
-        setProducts(filteredData);
-      } else {
-        setProducts(data);
-      }
+      const filteredData = data.find((d) => d.id === Number(id));
+      setProduct(filteredData);
     });
   }, [id]);
 
+  if (!product) return null;
+
   return (
     <Container className="mt-4">
-      <ItemList products={products} />
+      {product && (
+        <>
+          <div>{product.title}</div>
+          <div>{product.category}</div>
+          <div>${product.price}</div>
+          <img src={product.pictureUrl} alt={product.title} />
+        </>
+      )}
     </Container>
   );
 };
