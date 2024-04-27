@@ -15,10 +15,10 @@ export const NavBar = () => (
         </a>
         <Navbar.Brand href="/">MI MELI</Navbar.Brand>
         <Nav className="me-auto">
-          <Nav.Link to="/category/granel" as={NavLink}>
+          <Nav.Link to="/category/Granel" as={NavLink}>
             GRANEL
           </Nav.Link>
-          <Nav.Link to="/category/envasado" as={NavLink}>
+          <Nav.Link to="/category/Envasado" as={NavLink}>
             ENVASADO
           </Nav.Link>
         </Nav>

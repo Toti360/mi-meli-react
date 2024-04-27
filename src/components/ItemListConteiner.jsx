@@ -1,28 +1,40 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import {
+  getFirestore,
+  getDocs,
+  query,
+  where,
+  collection,
+} from "firebase/firestore";
 
 import Container from "react-bootstrap/Container";
 import { ItemList } from "./ItemList";
 
-import data from "../data/products.json";
-
-export const ItemListConteiner = (props) => {
+export const ItemListConteiner = () => {
   const [products, setProducts] = useState([]);
 
   const { id } = useParams();
 
   useEffect(() => {
-    const get = new Promise((resolve, reject) => {
-      setTimeout(() => resolve(data), 2000);
-    });
+    const db = getFirestore();
 
-    get.then((data) => {
-      if (id) {
-        const filteredData = data.filter((d) => d.category === id);
-        setProducts(filteredData);
-      } else {
-        setProducts(data);
-      }
+    let refCollection;
+
+    if (!id) refCollection = collection(db, "items");
+    else {
+      refCollection = query(
+        collection(db, "items"),
+        where("categoryId", "==", id)
+      );
+    }
+
+    getDocs(refCollection).then((snapshot) => {
+      setProducts(
+        snapshot.docs.map((doc) => {
+          return { id: doc.id, ...doc.data() };
+        })
+      );
     });
   }, [id]);
 

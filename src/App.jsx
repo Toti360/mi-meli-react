@@ -6,6 +6,8 @@ import "./App.css";
 import { ItemListConteiner } from "./components/ItemListConteiner";
 import { ItemDetailConteiner } from "./components/ItemDetailConteiner";
 import { NavBar } from "./components/NavBar";
+import { CartProvider } from "./contexts/CartContext";
+import { Cart } from "./components/Cart";
 
 function NotFound() {
   return <h1>404 - Página No Encontrada</h1>;
@@ -13,15 +15,18 @@ function NotFound() {
 
 function App() {
   return (
-    <BrowserRouter>
-      <NavBar />
-      <Routes>
-        <Route path="/" element={<ItemListConteiner />} />
-        <Route path="/category/:id" element={<ItemListConteiner />} />
-        <Route path="/item/:id" element={<ItemDetailConteiner />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
+    <CartProvider>
+      <BrowserRouter>
+        <NavBar />
+        <Routes>
+          <Route path="/" element={<ItemListConteiner />} />
+          <Route path="/category/:id" element={<ItemListConteiner />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/item/:id" element={<ItemDetailConteiner />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </CartProvider>
   );
 }
 
