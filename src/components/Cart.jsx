@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { getFirestore, addDoc, collection } from "firebase/firestore";
 import { Container } from "react-bootstrap";
 import { CartContext } from "../contexts/CartContext";
+import { Swal } from 'sweetalert2';
 
 const initialValues = {
   name: "",
@@ -38,7 +39,11 @@ export const Cart = () => {
 
     addDoc(orderCollection, order).then(({ id }) => {
       if (id) {
-        alert("Su orden: " + id + " ha sido completada!");
+        Swal.fire({
+          icon: "success",
+          title: "¡Orden completada!",
+          text: `Su orden: ${id} ha sido completada.`,
+        });
       }
     });
   };
@@ -87,7 +92,7 @@ export const Cart = () => {
       >
         DATOS
       </h2>
-      <form>
+      <form className="form-container">
         <div>
           <label>Nombre</label>
           <input
