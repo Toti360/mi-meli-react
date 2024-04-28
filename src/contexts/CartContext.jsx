@@ -7,28 +7,35 @@ export const CartProvider = ({ children }) => {
 
   const clear = () => setItems([]);
 
-  const addItem = (item) => setItems((prev) => [...prev, item]);
+  const addItem = (item, quantity) => {
+    const exists = items.some((i) => i.id === item.id);
 
-  /*const addItem = (item, quantity) => {
-    const addedItem = { ...item, quantity };
-    const newCart = [...items];
-    const inCart = newCart.find((product) => product.id === addedItem.id);
-    if (inCart) {
-        inCart.quantity += quantity;
-        setItems(newCart);
+    if (exists) {
+      const updateItems = items.map((i) => {
+        if (i.id === item.id) {
+          return {
+            ...i,
+            quantity: i.quantity + quantity,
+          };
+        } else {
+          return i;
+        }
+      });
+      setItems(updateItems);
     } else {
-        setItems([...items, addedItem]);
+      setItems((prev) => {
+        return [...prev, { ...item, quantity }];
+      });
     }
-  }
+  };
 
-  /*const removeItem = (i) => {
-    const filterCart = items.filter((item) => item.id !== i);
-    console.log(filterCart);
-    setItems(filterCart);
-};*/
+  const removeItem = (id) => {
+    const filterItems = items.filter((item) => item.id !== id);
+    setItems(filterItems);
+  };
 
   return (
-    <CartContext.Provider value={{ addItem, clear, items }}>
+    <CartContext.Provider value={{ addItem, clear, items, removeItem }}>
       {children}
     </CartContext.Provider>
   );

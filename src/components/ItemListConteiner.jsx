@@ -12,7 +12,8 @@ import Container from "react-bootstrap/Container";
 import { ItemList } from "./ItemList";
 
 export const ItemListConteiner = () => {
-  const [products, setProducts] = useState([]);
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const { id } = useParams();
 
@@ -29,18 +30,41 @@ export const ItemListConteiner = () => {
       );
     }
 
-    getDocs(refCollection).then((snapshot) => {
-      setProducts(
-        snapshot.docs.map((doc) => {
-          return { id: doc.id, ...doc.data() };
-        })
-      );
-    });
+    getDocs(refCollection)
+      .then((snapshot) => {
+        setItems(
+          snapshot.docs.map((doc) => {
+            return { id: doc.id, ...doc.data() };
+          })
+        );
+      })
+      .finally(() => setLoading(false));
   }, [id]);
+
+  if (loading)
+    return (
+      <div
+      className="loading-animation"
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        fontSize: "24px",
+      }}
+      >
+        LOADING...
+      </div>
+    );
 
   return (
     <Container className="mt-4">
-      <ItemList products={products} />
+      <h1
+        style={{ textAlign: "center", marginBottom: "20px", color: "#136fec" }}
+      >
+        TODOS LOS PRODUCTOS
+      </h1>
+      <ItemList items={items} />
     </Container>
   );
 };

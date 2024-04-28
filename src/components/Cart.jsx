@@ -1,14 +1,7 @@
-import Container from "react-bootstrap/Container";
-import { useContext, useState, useEffect } from "react";
-//import { Link } from 'react-router-dom';
-import {
-  getFirestore,
-	addDoc,
-	collection,
-} from 'firebase/firestore';
-
+import { useContext, useState } from "react";
+import { getFirestore, addDoc, collection } from "firebase/firestore";
+import { Container } from "react-bootstrap";
 import { CartContext } from "../contexts/CartContext";
-//import { PhoneAuthCredential } from "firebase/auth/cordova";
 
 const initialValues = {
   name: "",
@@ -51,21 +44,49 @@ export const Cart = () => {
   };
 
   return (
-    <Container className="mt-4">
-      <h1>MI CARRITO</h1>
+    <Container
+      className="mt-4 text-center"
+      style={{ backgroundColor: "#e6f2fe" }}
+    >
+      <h1
+        style={{ textAlign: "center", marginBottom: "5px", color: "#136fec" }}
+      >
+        MI CARRITO
+      </h1>
       <table>
+        <thead>
+          <tr
+            style={{
+              textAlign: "center",
+              marginBottom: "5px",
+              color: "#136fec",
+            }}
+          >
+            <th>NOMBRE</th>
+            <th>CANTIDAD</th>
+            <th>PRECIO</th>
+            <th>ELIMINAR</th>
+          </tr>
+        </thead>
         <tbody>
           {items.map((item) => (
             <tr key={item.id}>
               <td>{item.title}</td>
               <td>{item.quantity}</td>
               <td>{item.price}</td>
+              <td>
+                <button onClick={() => removeItem(item.id)}>ELIMINAR</button>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <div onClick={clear}>❌ VACIAR</div>
-      <h2>DATOS</h2>
+      <button onClick={clear}>❌ VACIAR</button>
+      <h2
+        style={{ textAlign: "center", marginBottom: "5px", color: "#136fec" }}
+      >
+        DATOS
+      </h2>
       <form>
         <div>
           <label>Nombre</label>

@@ -2,3 +2,20 @@
   color: white;
   padding-left: 1em;
 }
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.loading-animation {
+  animation: fadeInOut 0.75s infinite;
+}
+
