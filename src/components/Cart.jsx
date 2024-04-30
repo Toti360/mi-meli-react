@@ -27,16 +27,16 @@ export const Cart = () => {
       [name]: value,
     }));
 
+    // Validación de campos vacíos
     setFormError((prev) => ({
       ...prev,
-      [name]: value === " ",
+      [name]: value === "",
     }));
   };
 
   const total = items.reduce((acu, act) => acu + act.price * act.quantity, 0);
 
   const handledOrder = () => {
-  
     if (Object.values(formError).some(error => error)) {
       Swal.fire({
         icon: "error",
