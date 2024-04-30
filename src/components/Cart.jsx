@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { getFirestore, addDoc, collection } from "firebase/firestore";
 import { Container } from "react-bootstrap";
 import { CartContext } from "../contexts/CartContext";
-import { Swal } from 'sweetalert2';
+import Swal from 'sweetalert2';
 
 const initialValues = {
   name: "",
@@ -12,22 +12,41 @@ const initialValues = {
 
 export const Cart = () => {
   const [buyer, setBuyer] = useState(initialValues);
+  const [formError, setFormError] = useState({
+    name: false,
+    phone: false,
+    email: false,
+  });
   const { items, clear, removeItem } = useContext(CartContext);
 
   const handleChangue = (ev) => {
     const { name, value } = ev.target;
 
-    setBuyer((prev) => {
-      return {
-        ...prev,
-        [name]: value,
-      };
-    });
+    setBuyer((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    setFormError((prev) => ({
+      ...prev,
+      [name]: value === " ",
+    }));
   };
 
   const total = items.reduce((acu, act) => acu + act.price * act.quantity, 0);
 
   const handledOrder = () => {
+  
+    if (Object.values(formError).some(error => error)) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Por favor complete todos los campos del formulario",
+        confirmButtonText: "Aceptar",
+      });
+      return;
+    }
+
     const order = {
       buyer,
       items,
@@ -42,7 +61,8 @@ export const Cart = () => {
         Swal.fire({
           icon: "success",
           title: "¡Orden completada!",
-          text: `Su orden: ${id} ha sido completada.`,
+          text: `Su orden: ${id} ha sido completada!!`,
+          confirmButtonText: "Aceptar",
         });
       }
     });
@@ -65,6 +85,7 @@ export const Cart = () => {
               textAlign: "center",
               marginBottom: "5px",
               color: "#136fec",
+              padding: "1em"
             }}
           >
             <th>NOMBRE</th>
@@ -86,7 +107,7 @@ export const Cart = () => {
           ))}
         </tbody>
       </table>
-      <button onClick={clear}>❌ VACIAR</button>
+      <button onClick={clear}>VACIAR 🛒</button>
       <h2
         style={{ textAlign: "center", marginBottom: "5px", color: "#136fec" }}
       >
@@ -101,6 +122,7 @@ export const Cart = () => {
             name="name"
             onChange={handleChangue}
           />
+          {formError.name && <p style={{ color: 'red' }}>Por favor ingrese su nombre</p>}
         </div>
         <div>
           <label>Celular</label>
@@ -110,6 +132,7 @@ export const Cart = () => {
             name="phone"
             onChange={handleChangue}
           />
+          {formError.phone && <p style={{ color: 'red' }}>Por favor ingrese su número de teléfono</p>}
         </div>
         <div>
           <label>Email</label>
@@ -119,6 +142,7 @@ export const Cart = () => {
             name="email"
             onChange={handleChangue}
           />
+          {formError.email && <p style={{ color: 'red' }}>Por favor ingrese su correo electrónico</p>}
         </div>
         <button onClick={handledOrder}>COMPRAR</button>
       </form>

@@ -8,6 +8,7 @@ import { ItemDetailConteiner } from "./components/ItemDetailConteiner";
 import { NavBar } from "./components/NavBar";
 import { CartProvider } from "./contexts/CartContext";
 import { Cart } from "./components/Cart";
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 function NotFound() {
   return <h1>404 - Página No Encontrada</h1>;
